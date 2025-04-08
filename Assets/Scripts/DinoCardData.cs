@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DinoCardAta : MonoBehaviour
+[CreateAssetMenu(fileName = "New Dino Card", menuName = "Card/DinoCard")]
+public class DinoCardData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    public string cardName;
+    public int power;
+    public string ability;
+    public Sprite art;
 }
