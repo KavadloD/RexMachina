@@ -15,11 +15,15 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI nameTextShadow;
     public TextMeshProUGUI abilityTextShadow;
 
-
     public void SetupCard(DinoCardData data)
     {
         powerText.text = data.power.ToString();
         powerTextShadow.text = data.power.ToString();
+
+        // Scale font size based on power (1 = 0.2, 13 = 1.0)
+        float scaledFontSize = Mathf.Lerp(0.2f, 1.0f, (data.power - 1) / 12f);
+        powerText.fontSize = scaledFontSize;
+        powerTextShadow.fontSize = scaledFontSize;
 
         nameText.text = data.cardName;
         nameTextShadow.text = data.cardName;
@@ -31,5 +35,11 @@ public class CardDisplay : MonoBehaviour
         {
             dinoArt.sprite = data.art;
         }
+    }
+
+    private float CalculateFontSize(int power)
+    {
+        // Power 1 = 0.2 font size, Power 13 = 1.0
+        return Mathf.Lerp(0.2f, 1.0f, (power - 1) / 12f);
     }
 }
