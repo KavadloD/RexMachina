@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+
 
 public class DeckManager : MonoBehaviour
 {
@@ -14,7 +16,11 @@ public class DeckManager : MonoBehaviour
     public List<DinoCardData> playerDeck = new List<DinoCardData>();
     public List<DinoCardData> enemyDeck = new List<DinoCardData>();
 
-//Starts game
+    //Autoplay
+    public bool autoPlay = false;
+    public float delayBetweenRounds = 1.0f;
+
+    //Starts game
     void Start()
     {
         FillDeck(playerDeck);
@@ -88,5 +94,25 @@ public class DeckManager : MonoBehaviour
 
         playerDeck.RemoveAt(0);
         enemyDeck.RemoveAt(0);
+    }
+    public void StartAutoPlay()
+    {
+        if (!autoPlay)
+        {
+            autoPlay = true;
+            StartCoroutine(AutoPlayRoutine());
+        }
+    }
+
+    IEnumerator AutoPlayRoutine()
+    {
+        while (playerDeck.Count > 0 && enemyDeck.Count > 0)
+        {
+            PlayRound();
+            yield return new WaitForSeconds(delayBetweenRounds);
+        }
+
+        autoPlay = false;
+        Debug.Log("Auto-play ended.");
     }
 }

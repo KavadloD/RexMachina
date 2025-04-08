@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5082528052520875340}
   - component: {fileID: 3217945437171895029}
   m_Layer: 0
-  m_Name: PowerText (1)
+  m_Name: PowerTextShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -843,6 +843,9 @@ MonoBehaviour:
   nameText: {fileID: 4669755768577219539}
   abilityText: {fileID: 4669755769060156556}
   dinoArt: {fileID: 4669755768409865077}
+  powerTextShadow: {fileID: 3217945437171895029}
+  nameTextShadow: {fileID: 220768328250885124}
+  abilityTextShadow: {fileID: 4658323861049985248}
 --- !u!114 &363414506905123542
 MonoBehaviour:
   m_ObjectHideFlags: 0
