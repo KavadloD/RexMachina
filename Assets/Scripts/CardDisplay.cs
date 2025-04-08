@@ -12,7 +12,7 @@ public class CardDisplay : MonoBehaviour
     public void SetupCard(DinoCardData data)
     {
         powerText.text = data.power.ToString();
-        nameText.text = data.name;
+        nameText.text = data.cardName;
         abilityText.text = data.ability;
 
         if (dinoArt != null && data.art != null)

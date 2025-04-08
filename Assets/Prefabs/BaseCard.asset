@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c20e51b42e6c5994ebd3146cc36dc21d, type: 3}
-  m_Name: RaptorCard
+  m_Name: BaseCard
   m_EditorClassIdentifier: 
-  cardName: Raptor
-  power: 1
-  ability: Always wins ties
+  cardName: Test Dino
+  power: 0
+  ability: Placeholder ability
   art: {fileID: 21300000, guid: 53ec55e7d90335f40bb2ba511a9c0d62, type: 3}
