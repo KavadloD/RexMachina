@@ -5,14 +5,23 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+MemoryCaptures/
+UserSettings/
 
-# Asset meta data
-/[Aa]ssets/**/*.cs.meta
-/[Aa]ssets/**/*.meta
-!/[Aa]ssets/**/*.png.meta
-!/[Aa]ssets/**/*.prefab.meta
-!/[Aa]ssets/**/*.mat.meta
-!/[Aa]ssets/**/*.unity.meta
+# Crash logs
+sysinfo.txt
+*.stacktrace
+
+# Auto-generated
+*.unityproj
+*.pidb
+*.booproj
+*.svd
+*.userprefs
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
 
 # Visual Studio
 .vscode/
@@ -25,26 +34,7 @@
 .DS_Store
 Thumbs.db
 
-# Unity-generated files
-*.pidb
-*.booproj
-*.svd
-*.userprefs
-
-# Crash logs
-sysinfo.txt
-*.stacktrace
-
-# Auto-generated
-*.unityproj
-*.pidb.meta
-*.pdb
-
-# Rider
-.idea/
-*.sln.iml
-
-# Builds (optional)
+# Builds
 *.apk
 *.aab
 *.xcodeproj
@@ -53,6 +43,5 @@ sysinfo.txt
 *.zip
 *.exe
 
-# JetBrains Rider (if using)
-.idea/
-*.sln.iml
+# Do NOT ignore meta files — they are essential!
+# Keep all of Assets/ and ProjectSettings/
