@@ -16,9 +16,22 @@ public class DeckManager : MonoBehaviour
     public List<DinoCardData> playerDeck = new List<DinoCardData>();
     public List<DinoCardData> enemyDeck = new List<DinoCardData>();
 
-    //Autoplay
+    /*Autoplay
     public bool autoPlay = false;
     public float delayBetweenRounds = 1.0f;
+    */
+
+    //Hand and card selection
+    private List<DinoCardData> playerHand = new List<DinoCardData>();
+    private List<DinoCardData> enemyHand = new List<DinoCardData>();
+
+    private DinoCardData selectedPlayerCard;
+    private DinoCardData selectedEnemyCard;
+    public GameObject handCardPrefab;
+    public Transform playerHandContainer;
+    private List<HandCardUI> handCardUIs = new List<HandCardUI>();
+
+
 
     //Starts game
     void Start()
@@ -29,7 +42,7 @@ public class DeckManager : MonoBehaviour
         ShuffleDeck(playerDeck);
         ShuffleDeck(enemyDeck);
 
-        PlayRound();
+        StartGame();
     }
 
     //Fills each deck. Basic loop that creates a new card, randomizes power, then adds it to the deck (power is only 1-13 for now)
@@ -62,39 +75,55 @@ public class DeckManager : MonoBehaviour
     //Gameplay loop
     public void PlayRound()
     {
+        if (selectedPlayerCard == null || playerHand.Count == 0 || enemyHand.Count == 0)
+        {
+            Debug.Log("Cannot play round – make sure a card is selected and hands are valid.");
+            return;
+        }
+
+        // Enemy randomly selects a card from their hand
+        selectedEnemyCard = enemyHand[Random.Range(0, enemyHand.Count)];
+
         if (playerDeck.Count == 0 || enemyDeck.Count == 0)
         {
             Debug.Log("Game Over!");
             return;
         }
+        // Show both played cards
+        playerCardDisplay.SetupCard(selectedPlayerCard);
+        enemyCardDisplay.SetupCard(selectedEnemyCard);
 
-        DinoCardData playerCard = playerDeck[0];
-        DinoCardData enemyCard = enemyDeck[0];
-
-        playerCardDisplay.SetupCard(playerCard);
-        enemyCardDisplay.SetupCard(enemyCard);
-
-        if (playerCard.power > enemyCard.power)
+        // Determine round winner (tie goes to player)
+        if (selectedPlayerCard.power >= selectedEnemyCard.power)
         {
             Debug.Log("You win the round!");
-            playerDeck.Add(playerCard);
-            playerDeck.Add(enemyCard);
-        }
-        else if (enemyCard.power > playerCard.power)
-        {
-            Debug.Log("You lose the round!");
-            enemyDeck.Add(enemyCard);
-            enemyDeck.Add(playerCard);
+            playerDeck.Add(selectedPlayerCard);
+            playerDeck.Add(selectedEnemyCard);
         }
         else
         {
-            Debug.Log("Tie! (War logic could go here)");
-            // You can expand this later!
+            Debug.Log("Enemy wins the round!");
+            enemyDeck.Add(selectedEnemyCard);
+            enemyDeck.Add(selectedPlayerCard);
         }
 
-        playerDeck.RemoveAt(0);
-        enemyDeck.RemoveAt(0);
+        // Remove played cards from hand
+        playerHand.Remove(selectedPlayerCard);
+        enemyHand.Remove(selectedEnemyCard);
+
+        // Reset selections
+        selectedPlayerCard = null;
+        selectedEnemyCard = null;
+
+        // Refill hands
+        DrawCardToHand(playerDeck, playerHand);
+        DrawCardToHand(enemyDeck, enemyHand);
+
+        // Refresh hand UI (if implemented)
+        DisplayPlayerHand();
     }
+
+    /*
     public void StartAutoPlay()
     {
         if (!autoPlay)
@@ -103,6 +132,7 @@ public class DeckManager : MonoBehaviour
             StartCoroutine(AutoPlayRoutine());
         }
     }
+
 
     IEnumerator AutoPlayRoutine()
     {
@@ -115,4 +145,74 @@ public class DeckManager : MonoBehaviour
         autoPlay = false;
         Debug.Log("Auto-play ended.");
     }
+    */
+
+    public void StartGame()
+    {
+        playerHand.Clear();
+        enemyHand.Clear();
+
+        for (int i = 0; i < 3; i++)
+        {
+            DrawCardToHand(playerDeck, playerHand);
+            DrawCardToHand(enemyDeck, enemyHand);
+        }
+
+        DisplayPlayerHand();
+    }
+
+    void DrawCardToHand(List<DinoCardData> fromDeck, List<DinoCardData> toHand)
+    {
+        if (fromDeck.Count == 0) return;
+
+        DinoCardData card = fromDeck[0];
+        fromDeck.RemoveAt(0);
+        toHand.Add(card);
+    }
+
+    public void OnPlayerCardClicked(DinoCardData cardData)
+    {
+        selectedPlayerCard = cardData;
+        HighlightSelectedCard(cardData); // Optional: visual feedback
+    }
+
+    public void DisplayPlayerHand()
+    {
+        if (handCardPrefab == null || playerHandContainer == null)
+        {
+            Debug.LogWarning("HandCardPrefab or PlayerHandContainer not assigned.");
+            return;
+        }
+
+        foreach (Transform child in playerHandContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        handCardUIs.Clear();
+
+        foreach (DinoCardData card in playerHand)
+        {
+            GameObject cardGO = Instantiate(handCardPrefab, playerHandContainer);
+            HandCardUI ui = cardGO.GetComponent<HandCardUI>();
+            ui.Setup(card, this);
+            handCardUIs.Add(ui);
+        }
+    }
+
+    public void HighlightSelectedCard(DinoCardData selected)
+    {
+        foreach (HandCardUI cardUI in handCardUIs)
+        {
+            bool isSelected = cardUI.cardDisplay.data == selected;
+            cardUI.SetSelected(isSelected);
+        }
+    }
+
+    private void ShowRoundResult(string message)
+    {
+        Debug.Log(message);
+        // Add UI banner, animation, sound, etc. later
+    }
+
 }

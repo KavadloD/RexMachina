@@ -15,8 +15,11 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI nameTextShadow;
     public TextMeshProUGUI abilityTextShadow;
 
+    public DinoCardData data { get; private set; }
+
     public void SetupCard(DinoCardData data)
     {
+        this.data = data;
         powerText.text = data.power.ToString();
         powerTextShadow.text = data.power.ToString();
 
