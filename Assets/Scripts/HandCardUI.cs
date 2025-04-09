@@ -7,33 +7,49 @@ public class HandCardUI : MonoBehaviour
     private DinoCardData cardData;
     private DeckManager deckManager;
 
-    public Image highlightBorder; // optional
+    public Image highlightBorder;
 
     public void Setup(DinoCardData data, DeckManager manager)
     {
         cardData = data;
         deckManager = manager;
 
-        if (cardDisplay != null)
+        if (cardDisplay == null)
+        {
+            Debug.LogError("[HandCardUI] cardDisplay is NULL on: " + gameObject.name);
+        }
+        else
+        {
             cardDisplay.SetupCard(data);
+        }
 
         SetSelected(false);
 
-        // Dynamically hook up OnClick event here!
-        GetComponent<Button>().onClick.RemoveAllListeners();
-        GetComponent<Button>().onClick.AddListener(OnClick);
+        var btn = GetComponent<Button>();
+        if (btn == null)
+        {
+            Debug.LogError("[HandCardUI] Button component missing on: " + gameObject.name);
+        }
+        else
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(OnClick);
+        }
     }
 
     public void OnClick()
     {
-        Debug.Log("Card clicked: " + cardData?.cardName); // <- Add this line
+        Debug.Log("Card clicked: " + (cardData != null ? cardData.cardName : "NULL card"));
 
         if (deckManager != null && cardData != null)
         {
             deckManager.OnPlayerCardClicked(cardData);
         }
+        else
+        {
+            Debug.LogWarning("Card click failed: deckManager or cardData was null.");
+        }
     }
-
 
     public void SetSelected(bool isSelected)
     {

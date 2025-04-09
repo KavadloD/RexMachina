@@ -24,7 +24,7 @@ public class CardDisplay : MonoBehaviour
         powerTextShadow.text = data.power.ToString();
 
         // Scale font size based on power (1 = 0.2, 13 = 1.0)
-        float scaledFontSize = Mathf.Lerp(0.2f, 1.0f, (data.power - 1) / 12f);
+        float scaledFontSize = Mathf.Lerp(0.2f * 100, 1.0f * 100, (data.power - 1) / 12f);
         powerText.fontSize = scaledFontSize;
         powerTextShadow.fontSize = scaledFontSize;
 
