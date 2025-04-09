@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class HandCardUI : MonoBehaviour
@@ -19,15 +18,22 @@ public class HandCardUI : MonoBehaviour
             cardDisplay.SetupCard(data);
 
         SetSelected(false);
+
+        // Dynamically hook up OnClick event here!
+        GetComponent<Button>().onClick.RemoveAllListeners();
+        GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
     public void OnClick()
     {
+        Debug.Log("Card clicked: " + cardData?.cardName); // <- Add this line
+
         if (deckManager != null && cardData != null)
         {
             deckManager.OnPlayerCardClicked(cardData);
         }
     }
+
 
     public void SetSelected(bool isSelected)
     {

@@ -75,6 +75,11 @@ public class DeckManager : MonoBehaviour
     //Gameplay loop
     public void PlayRound()
     {
+        Debug.Log("Play button clicked");
+        Debug.Log("selectedPlayerCard: " + (selectedPlayerCard != null ? selectedPlayerCard.cardName : "null"));
+        Debug.Log("playerHand.Count: " + playerHand.Count);
+        Debug.Log("enemyHand.Count: " + enemyHand.Count);
+
         if (selectedPlayerCard == null || playerHand.Count == 0 || enemyHand.Count == 0)
         {
             Debug.Log("Cannot play round – make sure a card is selected and hands are valid.");
@@ -173,7 +178,8 @@ public class DeckManager : MonoBehaviour
     public void OnPlayerCardClicked(DinoCardData cardData)
     {
         selectedPlayerCard = cardData;
-        HighlightSelectedCard(cardData); // Optional: visual feedback
+        Debug.Log("Player selected: " + cardData.cardName + " with power " + cardData.power);
+        HighlightSelectedCard(cardData);
     }
 
     public void DisplayPlayerHand()
@@ -194,7 +200,7 @@ public class DeckManager : MonoBehaviour
         foreach (DinoCardData card in playerHand)
         {
             GameObject cardGO = Instantiate(handCardPrefab, playerHandContainer);
-            HandCardUI ui = cardGO.GetComponent<HandCardUI>();
+            HandCardUI ui = cardGO.GetComponentInChildren<HandCardUI>();
             ui.Setup(card, this);
             handCardUIs.Add(ui);
         }
